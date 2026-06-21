@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía Testigo Electoral – Pacto Histórico</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f4f6fa; color: #1a1a2e; }
+  header {
+    background: linear-gradient(135deg, #3b1f8c, #7b2d8b);
+    color: white; padding: 24px 32px; text-align: center;
+  }
+  header h1 { font-size: 1.8rem; margin-bottom: 6px; }
+  header p { font-size: 1rem; opacity: 0.85; }
+  .badge {
+    display: inline-block; background: #f5a623; color: #fff;
+    border-radius: 20px; padding: 4px 14px; font-size: 0.78rem;
+    font-weight: bold; margin-top: 10px; letter-spacing: 0.5px;
+  }
+  nav {
+    background: #fff; display: flex; flex-wrap: wrap; justify-content: center;
+    gap: 8px; padding: 14px 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    position: sticky; top: 0; z-index: 100;
+  }
+  nav button {
+    background: #ede9f7; border: none; border-radius: 20px;
+    padding: 8px 16px; cursor: pointer; font-size: 0.82rem;
+    color: #3b1f8c; font-weight: bold; transition: background 0.2s;
+  }
+  nav button:hover, nav button.active { background: #7b2d8b; color: white; }
+
+  .container { max-width: 900px; margin: 28px auto; padding: 0 16px 60px; }
+
+  .section { display: none; }
+  .section.visible { display: block; }
+
+  /* Progress bar */
+  .progress-wrap { background: #e0e0e0; border-radius: 10px; height: 12px; margin-bottom: 20px; }
+  .progress-bar { background: linear-gradient(90deg, #3b1f8c, #e63946); height: 12px; border-radius: 10px; transition: width 0.4s; }
+  .progress-label { font-size: 0.8rem; color: #555; margin-bottom: 6px; }
+
+  /* Steps */
+  .step-list { list-style: none; padding: 0; }
+  .step-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: white; border-radius: 12px; padding: 16px 18px;
+    margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    cursor: pointer; border-left: 5px solid #d0c8f0;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .step-item:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.12); }
+  .step-item.done { border-left-color: #2ecc71; background: #f0fff5; }
+  .step-num {
+    min-width: 36px; height: 36px; border-radius: 50%;
+    background: #3b1f8c; color: white; display: flex;
+    align-items: center; justify-content: center; font-weight: bold; font-size: 0.95rem;
+  }
+  .step-item.done .step-num { background: #2ecc71; }
+  .step-text { flex: 1; }
+  .step-text strong { display: block; font-size: 0.97rem; margin-bottom: 4px; }
+  .step-text span { font-size: 0.85rem; color: #555; line-height: 1.4; }
+  .check-icon { font-size: 1.3rem; min-width: 24px; text-align: center; margin-top: 6px; }
+
+  /* Alerts */
+  .alert {
+    border-radius: 10px; padding: 14px 18px; margin-bottom: 16px;
+    font-size: 0.9rem; line-height: 1.5;
+  }
+  .alert-red { background: #ffe5e5; border-left: 5px solid #e63946; color: #7a1c1c; }
+  .alert-orange { background: #fff4e0; border-left: 5px solid #f5a623; color: #7a4a00; }
+  .alert-green { background: #e8f8f0; border-left: 5px solid #2ecc71; color: #1a5c3a; }
+  .alert-purple { background: #f0ecff; border-left: 5px solid #7b2d8b; color: #3b1f8c; }
+  .alert strong { display: block; margin-bottom: 4px; font-size: 0.95rem; }
+
+  /* Info cards */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .card {
+    background: white; border-radius: 12px; padding: 18px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+  .card-icon { font-size: 1.8rem; margin-bottom: 8px; }
+  .card h3 { font-size: 0.95rem; margin-bottom: 6px; color: #3b1f8c; }
+  .card p { font-size: 0.83rem; color: #555; line-height: 1.45; }
+
+  /* Section title */
+  .sec-title {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 20px; padding-bottom: 10px;
+    border-bottom: 3px solid #ede9f7;
+  }
+  .sec-title h2 { font-size: 1.3rem; color: #3b1f8c; }
+  .sec-title .emoji { font-size: 1.6rem; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 30px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 12px; top: 0; bottom: 0;
+    width: 3px; background: #ede9f7;
+  }
+  .tl-item {
+    position: relative; margin-bottom: 18px;
+    background: white; border-radius: 10px; padding: 14px 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+  }
+  .tl-item::before {
+    content: ''; position: absolute; left: -24px; top: 18px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #7b2d8b; border: 3px solid #ede9f7;
+  }
+  .tl-time { font-size: 0.82rem; font-weight: bold; color: #e63946; margin-bottom: 4px; }
+  .tl-item p { font-size: 0.87rem; color: #333; line-height: 1.4; }
+
+  /* Prohib list */
+  .prohib-list { list-style: none; }
+  .prohib-list li {
+    background: white; border-radius: 10px; padding: 12px 16px;
+    margin-bottom: 10px; font-size: 0.88rem; color: #444;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .prohib-list li .icon { font-size: 1.1rem; }
+
+  .reset-btn {
+    display: block; margin: 24px auto 0; background: #e63946;
+    color: white; border: none; border-radius: 20px; padding: 10px 28px;
+    cursor: pointer; font-size: 0.9rem; font-weight: bold;
+  }
+  .reset-btn:hover { background: #c0202e; }
+
+  footer {
+    text-align: center; color: #888; font-size: 0.78rem;
+    margin-top: 40px; padding: 20px;
+  }
+
+  .save-all-btn {
+    background: #2ecc71; color: white; border: none; border-radius: 22px;
+    padding: 10px 24px; font-size: 0.9rem; font-weight: bold; cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2); transition: background 0.2s, transform 0.1s;
+  }
+  .save-all-btn:hover { background: #27ae60; transform: translateY(-1px); }
+  .save-all-btn:active { transform: translateY(0); }
+  .save-status { margin-left: 12px; font-size: 0.82rem; color: #fff; opacity: 0.9; }
+
+  /* Bitácora */
+  .note-toolbar { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+  .note-toolbar select, .note-toolbar input[type="text"] {
+    padding: 8px 12px; border-radius: 8px; border: 1px solid #d0c8f0; font-size: 0.85rem; font-family: Arial;
+  }
+  .note-form {
+    background: white; border-radius: 12px; padding: 16px; margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+  .note-form textarea {
+    width: 100%; min-height: 80px; border: 1px solid #d0c8f0; border-radius: 8px;
+    padding: 10px; font-family: Arial; font-size: 0.88rem; resize: vertical; margin-bottom: 10px;
+  }
+  .note-form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; align-items: center; }
+  .note-form-row label { font-size: 0.82rem; color: #555; font-weight: bold; }
+  .note-form-row select { padding: 6px 10px; border-radius: 6px; border: 1px solid #d0c8f0; font-size: 0.82rem; }
+  .add-note-btn {
+    background: #3b1f8c; color: white; border: none; border-radius: 18px;
+    padding: 9px 20px; font-size: 0.85rem; font-weight: bold; cursor: pointer;
+  }
+  .add-note-btn:hover { background: #2c1768; }
+
+  .note-list { list-style: none; }
+  .note-card {
+    background: white; border-radius: 10px; padding: 14px 16px; margin-bottom: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06); border-left: 5px solid #7b2d8b;
+  }
+  .note-card.tipo-irregularidad { border-left-color: #e63946; }
+  .note-card.tipo-reclamacion { border-left-color: #f5a623; }
+  .note-card.tipo-general { border-left-color: #7b2d8b; }
+  .note-card.tipo-positivo { border-left-color: #2ecc71; }
+  .note-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+  .note-tag {
+    display: inline-block; font-size: 0.72rem; font-weight: bold; padding: 2px 10px;
+    border-radius: 12px; color: white;
+  }
+  .tag-irregularidad { background: #e63946; }
+  .tag-reclamacion { background: #f5a623; }
+  .tag-general { background: #7b2d8b; }
+  .tag-positivo { background: #2ecc71; }
+  .note-time { font-size: 0.75rem; color: #999; }
+  .note-text { font-size: 0.88rem; color: #333; line-height: 1.5; white-space: pre-wrap; }
+  .note-del { background: none; border: none; color: #c0202e; cursor: pointer; font-size: 0.85rem; padding: 2px 6px; }
+  .note-del:hover { text-decoration: underline; }
+  .empty-notes { text-align: center; color: #999; padding: 30px; font-size: 0.9rem; }
+
+  /* Imágenes en bitácora */
+  .img-attach-btn {
+    background: #ede9f7; color: #3b1f8c; border: 1px solid #d0c8f0; border-radius: 18px;
+    padding: 9px 16px; font-size: 0.85rem; font-weight: bold; cursor: pointer;
+  }
+  .img-attach-btn:hover { background: #d0c8f0; }
+  .img-preview-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .img-preview-thumb { position: relative; width: 64px; height: 64px; border-radius: 8px; overflow: hidden; border: 1px solid #d0c8f0; }
+  .img-preview-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .img-preview-thumb .img-remove {
+    position: absolute; top: 0; right: 0; background: #e63946; color: white;
+    border: none; width: 18px; height: 18px; font-size: 0.7rem; cursor: pointer; line-height: 1;
+  }
+  .note-images { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .note-images img {
+    width: 80px; height: 80px; object-fit: cover; border-radius: 8px;
+    border: 1px solid #d0c8f0; cursor: pointer;
+  }
+  .doc-chip {
+    display: inline-flex; align-items: center; gap: 6px; background: #f0ecff;
+    border: 1px solid #d0c8f0; border-radius: 8px; padding: 6px 10px;
+    font-size: 0.78rem; color: #3b1f8c; text-decoration: none; max-width: 160px;
+  }
+  .doc-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .img-preview-thumb.doc-thumb {
+    width: auto; height: 64px; padding: 0 8px; display: flex; align-items: center;
+    gap: 4px; background: #f0ecff; font-size: 0.75rem; color: #3b1f8c; max-width: 110px;
+  }
+  .img-preview-thumb.doc-thumb span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .img-modal {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    z-index: 1000; align-items: center; justify-content: center; padding: 20px;
+  }
+  .img-modal.visible { display: flex; }
+  .img-modal img { max-width: 100%; max-height: 90vh; border-radius: 8px; }
+  .img-modal-close {
+    position: absolute; top: 16px; right: 24px; color: white; font-size: 2rem;
+    cursor: pointer; background: none; border: none;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📋 Guía Interactiva del Testigo Electoral</h1>
+  <p>Pacto Histórico · Jornada Electoral Segunda Vuelta · 21 de Junio</p>
+  <span class="badge">¡Vamos por Más!</span>
+  <div style="margin-top:14px;">
+    <button id="saveAllBtn" onclick="saveAll()" class="save-all-btn">💾 Guardar todos los cambios</button>
+    <button id="pdfBtn" onclick="exportPDF()" class="save-all-btn" style="background:#3b1f8c;">🖨️ Guardar PDF</button>
+    <button id="emailBtn" onclick="sendByEmail()" class="save-all-btn" style="background:#f5a623; color:#3b1f8c;">📧 Enviar por correo</button>
+    <span id="saveStatus" class="save-status"></span>
+  </div>
+</header>
+
+<nav id="mainNav">
+  <button class="active" onclick="showSection('checklist')">✅ Checklist</button>
+  <button onclick="showSection('horario')">🕐 Horario</button>
+  <button onclick="showSection('apertura')">🔓 Apertura Mesa</button>
+  <button onclick="showSection('votacion')">🗳 Durante Votación</button>
+  <button onclick="showSection('cierre')">🔒 Cierre</button>
+  <button onclick="showSection('prohibiciones')">🚫 Prohibiciones</button>
+  <button onclick="showSection('importante')">⚠️ Puntos Clave</button>
+  <button onclick="showSection('bitacora')">📝 Bitácora</button>
+</nav>
+
+<div class="container">
+
+  <!-- CHECKLIST -->
+  <div class="section visible" id="checklist">
+    <div class="sec-title"><span class="emoji">✅</span><h2>Checklist Completo del Testigo Electoral</h2></div>
+
+    <div class="alert alert-purple">
+      <strong>💡 ¿Cómo usar este checklist?</strong>
+      Haz clic en cada paso para marcarlo como completado. El progreso se guarda automáticamente en tu sesión.
+    </div>
+
+    <div class="progress-label" id="progressLabel">Progreso: 0 de 20 pasos completados</div>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+
+    <h3 style="margin:16px 0 10px; color:#3b1f8c;">📌 ANTES DE IR – Preparación</h3>
+    <ul class="step-list" id="stepList">
+      <li class="step-item" data-id="0" onclick="toggleStep(this)">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Lleva tu cédula de ciudadanía</strong><span>Documento original (o digital desde la app "Cédula Digital Colombia").</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="1" onclick="toggleStep(this)">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Lleva tu credencial de testigo electoral (E-15)</strong><span>La credencial es el ÚNICO medio para acreditar tu calidad. Tenla lista y accesible.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="2" onclick="toggleStep(this)">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Verifica tu puesto y mesa asignada</strong><span>Consulta la credencial E-15: tiene zona, puesto y mesa. Llega al lugar correcto.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="3" onclick="toggleStep(this)">
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>Ropa sin propaganda electoral</strong><span>Está prohibido portar prendas con logos, colores o mensajes políticos.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+
+      <h3 style="margin:16px 0 10px; color:#3b1f8c; display:block;">🔓 APERTURA DE MESA (7:30 AM – 8:00 AM)</h3>
+      <li class="step-item" data-id="4" onclick="toggleStep(this)">
+        <div class="step-num">5</div>
+        <div class="step-text"><strong>Preséntate en el puesto a las 7:30 AM con tu credencial</strong><span>Ingresa al puesto mostrando la credencial E-15 y tu cédula.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="5" onclick="toggleStep(this)">
+        <div class="step-num">6</div>
+        <div class="step-text"><strong>Verifica el contenido del Kit Electoral</strong><span>Observa que los jurados revisen: formularios E-9, E-10, E-11, E-14, E-17, tarjetas, lapiceros, sobres.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="6" onclick="toggleStep(this)">
+        <div class="step-num">7</div>
+        <div class="step-text"><strong>Verifica que los documentos estén en blanco</strong><span>Ningún campo debe estar diligenciado previamente.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="7" onclick="toggleStep(this)">
+        <div class="step-num">8</div>
+        <div class="step-text"><strong>Confirma que los jurados estén debidamente acreditados</strong><span>Deben ser mínimo 2 jurados en la mesa asignada.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="8" onclick="toggleStep(this)">
+        <div class="step-num">9</div>
+        <div class="step-text"><strong>Verifica que la urna esté vacía al armarla</strong><span>Observar la urna antes de sellarla con el formulario E-9.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="9" onclick="toggleStep(this)">
+        <div class="step-num">10</div>
+        <div class="step-text"><strong>Verifica que el tarjetón NO se abra antes de las 8:00 AM</strong><span>Y que las votaciones inicien exactamente a las 8:00 AM.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+
+      <h3 style="margin:16px 0 10px; color:#3b1f8c; display:block;">🗳 DURANTE LA VOTACIÓN (8:00 AM – 4:00 PM)</h3>
+      <li class="step-item" data-id="10" onclick="toggleStep(this)">
+        <div class="step-num">11</div>
+        <div class="step-text"><strong>Verifica que el votante presente su cédula</strong><span>Es el único documento válido. Cédula digital solo desde la app oficial.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="11" onclick="toggleStep(this)">
+        <div class="step-num">12</div>
+        <div class="step-text"><strong>Vigilar que el proceso sea libre, secreto y sin presiones</strong><span>Sin interferencias de particulares ni autoridades.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="12" onclick="toggleStep(this)">
+        <div class="step-num">13</div>
+        <div class="step-text"><strong>Alertar si hay personas no autorizadas en el puesto</strong><span>Incluyendo comandos alrededor del puesto. Reportar a autoridades y coordinaciones Pacto.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="13" onclick="toggleStep(this)">
+        <div class="step-num">14</div>
+        <div class="step-text"><strong>Vigilar que las mesas funcionen con mínimo 2 jurados</strong><span>Ninguna mesa puede funcionar con menos de dos (2) jurados.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+
+      <h3 style="margin:16px 0 10px; color:#3b1f8c; display:block;">🔒 CIERRE Y ESCRUTINIO (desde las 4:00 PM)</h3>
+      <li class="step-item" data-id="14" onclick="toggleStep(this)">
+        <div class="step-num">15</div>
+        <div class="step-text"><strong>Vigilar la destrucción del material sobrante</strong><span>Tarjetas no usadas e inservibles + certificados sobrantes → sobre plástico sellado.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="15" onclick="toggleStep(this)">
+        <div class="step-num">16</div>
+        <div class="step-text"><strong>Verificar la totalización del formulario E-11</strong><span>Total votantes, lectura en voz alta. FOTOGRAFIAR solo la página del total.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="16" onclick="toggleStep(this)">
+        <div class="step-num">17</div>
+        <div class="step-text"><strong>Apertura de urnas y conteo de votos</strong><span>Observar la organización, verificación y conteo de tarjetas. Solo UN lapicero en mesa.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="17" onclick="toggleStep(this)">
+        <div class="step-num">18</div>
+        <div class="step-text"><strong>FOTOGRAFIAR los 3 cuerpos del E-14 juntos (aún adheridos)</strong><span>Antes de que los separen. También fotografiar la página del Pacto y la última página con firmas.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="18" onclick="toggleStep(this)">
+        <div class="step-num">19</div>
+        <div class="step-text"><strong>Verificar sellado del sobre de claveros y su entrega a la Registraduría</strong><span>El sobre debe ir sellado y firmado.</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+      <li class="step-item" data-id="19" onclick="toggleStep(this)">
+        <div class="step-num">20</div>
+        <div class="step-text"><strong>Reportar en la Plataforma Pacto al llegar y subir fotos</strong><span>E-11 pág. totalizada · E-14 los 3 juntos · Sobre claveros sellado · Reclamación (si aplica).</span></div>
+        <div class="check-icon">⬜</div>
+      </li>
+    </ul>
+
+    <button class="reset-btn" onclick="resetAll()">🔄 Reiniciar Checklist</button>
+  </div>
+
+  <!-- HORARIO -->
+  <div class="section" id="horario">
+    <div class="sec-title"><span class="emoji">🕐</span><h2>Horario del Día Electoral</h2></div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-time">5:30 AM</div><p>Llegan servidores públicos electorales (registradores y delegados).</p></div>
+      <div class="tl-item"><div class="tl-time">7:00 AM</div><p>Registradores verifican estado de puestos y mesas.</p></div>
+      <div class="tl-item"><div class="tl-time">7:30 AM</div><p>⭐ <strong>Ingreso de jurados.</strong> Ingresan también los testigos. Verificación de identidad de jurados.</p></div>
+      <div class="tl-item"><div class="tl-time">7:30–8:00 AM</div><p>Instalación de mesas: kit electoral, urna vacía, formulario E-9, posesión de jurados.</p></div>
+      <div class="tl-item"><div class="tl-time">7:55 AM</div><p>Instalación formal de los jurados de votación.</p></div>
+      <div class="tl-item"><div class="tl-time">8:00 AM</div><p>⭐ <strong>Inicio de votaciones.</strong> Los tarjetones se abren en este momento.</p></div>
+      <div class="tl-item"><div class="tl-time">8:00 AM – 4:00 PM</div><p>Desarrollo de las votaciones. Testigo vigila en su mesa.</p></div>
+      <div class="tl-item"><div class="tl-time">4:00 PM</div><p>⭐ <strong>Cierre de votaciones.</strong> Inicia proceso de escrutinio de mesa.</p></div>
+      <div class="tl-item"><div class="tl-time">Después 4:00 PM</div><p>Escrutinios: destrucción sobrante, totalización E-11, apertura urnas, diligenciamiento E-14, fotografías, sellado sobre claveros.</p></div>
+    </div>
+  </div>
+
+  <!-- APERTURA -->
+  <div class="section" id="apertura">
+    <div class="sec-title"><span class="emoji">🔓</span><h2>Instalación y Apertura de Mesa (7:30–8:00 AM)</h2></div>
+    <div class="alert alert-orange"><strong>⚠️ Importante</strong> Preséntate con tu cédula Y credencial E-15. Sin ella no puedes actuar como testigo.</div>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">📦</div><h3>Paso 1 – Kit Electoral</h3><p>Verificar que los jurados revisen: E-9, E-10, E-11, E-14, E-17, tarjetas electorales, certificados, sobres, lapiceros.</p></div>
+      <div class="card"><div class="card-icon">📝</div><h3>Paso 2 – Documentos en blanco</h3><p>Ningún campo debe estar diligenciado. Si hay algo escrito, es una irregularidad.</p></div>
+      <div class="card"><div class="card-icon">👥</div><h3>Paso 3 – Jurados acreditados</h3><p>Mínimo 2 jurados, en la mesa correcta y debidamente acreditados.</p></div>
+      <div class="card"><div class="card-icon">📦</div><h3>Paso 4 – Urna vacía</h3><p>Verificar que la urna esté vacía al momento de armarla.</p></div>
+      <div class="card"><div class="card-icon">📋</div><h3>Paso 5 – Formulario E-9</h3><p>Los jurados deben diligenciar el sello "Urna Cerrada y Sellada" con sus datos y firmas.</p></div>
+      <div class="card"><div class="card-icon">🕗</div><h3>Paso 6 & 7 – Tarjetón y Apertura</h3><p>Tarjetones NO se abren antes de las 8:00 AM. Votaciones inician exactamente a las 8:00 AM.</p></div>
+    </div>
+  </div>
+
+  <!-- VOTACION -->
+  <div class="section" id="votacion">
+    <div class="sec-title"><span class="emoji">🗳</span><h2>Durante la Votación (8:00 AM – 4:00 PM)</h2></div>
+    <div class="alert alert-green"><strong>✅ Objetivo central</strong> Garantizar que el proceso sea libre, secreto, sin presiones ni interferencias.</div>
+
+    <h3 style="margin:14px 0 10px; color:#3b1f8c;">Protocolo de votación que debes vigilar:</h3>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">🪪</div><h3>1. Verificación identidad</h3><p>Cédula física o app oficial "Cédula Digital Colombia". NO se aceptan PDFs ni fotos.</p></div>
+      <div class="card"><div class="card-icon">📋</div><h3>2. Formulario E-10</h3><p>El jurado busca al ciudadano en la lista de sufragantes y resalta su casilla.</p></div>
+      <div class="card"><div class="card-icon">📝</div><h3>3. Formulario E-11</h3><p>Un jurado registra datos del votante y el orden de votación.</p></div>
+      <div class="card"><div class="card-icon">🗳</div><h3>4. Entrega tarjetón</h3><p>Solo el jurado firma y entrega la tarjeta al votante.</p></div>
+      <div class="card"><div class="card-icon">🚪</div><h3>5. Voto secreto</h3><p>El ciudadano vota solo en el cubículo, sin acompañantes (excepto discapacitados, adultos mayores, limitación cognitiva).</p></div>
+      <div class="card"><div class="card-icon">✅</div><h3>6. Depósito en urna</h3><p>El votante muestra los tarjetones al jurado, quien autoriza depositarlos.</p></div>
+    </div>
+
+    <div class="alert alert-red" style="margin-top:14px;">
+      <strong>🚨 Alerta inmediata si detectas:</strong>
+      Personas no autorizadas · Mesa con menos de 2 jurados · Tarjetas fuera del puesto · Presión sobre votantes · Comandos alrededor del puesto.
+      <br><br><strong>Acción:</strong> Mantén la calma → reporta a autoridades presentes → informa a las Coordinaciones Pacto.
+    </div>
+  </div>
+
+  <!-- CIERRE -->
+  <div class="section" id="cierre">
+    <div class="sec-title"><span class="emoji">🔒</span><h2>Cierre de Mesa y Escrutinio (4:00 PM en adelante)</h2></div>
+    <div class="alert alert-red"><strong>🔴 MOMENTO MÁS RIESGOSO DE LA JORNADA</strong> Permanece atento. Solo debe haber UN lapicero en la mesa. Quienes manipulan votos NO pueden tener lapiceros.</div>
+
+    <div class="step-list" style="margin-top:12px;">
+      <div class="step-item" style="cursor:default;">
+        <div class="step-num" style="background:#e63946;">1</div>
+        <div class="step-text"><strong>Destrucción del material sobrante</strong><span>Tarjetas no usadas + inservibles + certificados sobrantes → sobre plástico sellado y entregado.</span></div>
+      </div>
+      <div class="step-item" style="cursor:default;">
+        <div class="step-num" style="background:#e63946;">2</div>
+        <div class="step-text"><strong>Totalización Formulario E-11</strong><span>Suma total de votantes. Lectura en voz alta. FOTOGRAFIAR solo la página del total. Firma de jurados.</span></div>
+      </div>
+      <div class="step-item" style="cursor:default;">
+        <div class="step-num" style="background:#e63946;">3</div>
+        <div class="step-text"><strong>Apertura de urnas y conteo</strong><span>Organización, verificación y conteo de tarjetas extraídas.</span></div>
+      </div>
+      <div class="step-item" style="cursor:default;">
+        <div class="step-num" style="background:#e63946;">4</div>
+        <div class="step-text"><strong>Nivelación de la mesa (Formulario E-14)</strong><span>Se registran: total sufragantes E-11, total votos urna, y (si aplica) votos incinerados.</span></div>
+      </div>
+      <div class="step-item" style="cursor:default;">
+        <div class="step-num" style="background:#e63946;">5</div>
+        <div class="step-text"><strong>📸 Fotografiar los 3 cuerpos del E-14 juntos (aún adheridos)</strong><span>También foto de la página del Pacto en E-14 y última página con observaciones y firmas de Cámara y Senado.</span></div>
+      </div>
+      <div class="step-item" style="cursor:default;">
+        <div class="step-num" style="background:#e63946;">6</div>
+        <div class="step-text"><strong>Separación y distribución de cuerpos del E-14</strong><span>E-14 Claveros (Senado, Cámara, Consulta) + E-11 + tarjetones → sobre claveros. E-14 Delegados y Transmisión → entregados aparte.</span></div>
+      </div>
+      <div class="step-item" style="cursor:default;">
+        <div class="step-num" style="background:#e63946;">7</div>
+        <div class="step-text"><strong>Sellado del sobre de claveros</strong><span>Sellado, firmado y entregado al personal de Claveros de la Registraduría.</span></div>
+      </div>
+    </div>
+
+    <div class="alert alert-orange" style="margin-top:14px;">
+      <strong>📲 Reporta en la Plataforma Pacto:</strong>
+      Informar que llegaste al puesto · Subir foto E-11 pág. totalizada · Foto E-14 los 3 juntos · Foto sobre claveros sellado · Reclamación (si fue necesaria).
+    </div>
+  </div>
+
+  <!-- PROHIBICIONES -->
+  <div class="section" id="prohibiciones">
+    <div class="sec-title"><span class="emoji">🚫</span><h2>Prohibiciones del Testigo Electoral</h2></div>
+    <div class="alert alert-red"><strong>❌ Estas acciones pueden anular tu credencial y generarte problemas legales.</strong></div>
+    <ul class="prohib-list">
+      <li><span class="icon">👕</span> Portar ropa o distintivo con propaganda electoral o divulgación política.</li>
+      <li><span class="icon">💬</span> Hacer insinuaciones a los votantes, jurados o comisiones escrutadoras.</li>
+      <li><span class="icon">🚪</span> Acompañar a los votantes al interior del cubículo de votación.</li>
+      <li><span class="icon">⛔</span> Interferir en la votación o en los escrutinios de mesa.</li>
+      <li><span class="icon">📄</span> Tocar el material electoral o diligenciar formularios electorales.</li>
+      <li><span class="icon">🪪</span> Ceder a terceros tu credencial de testigo electoral.</li>
+      <li><span class="icon">📷</span> Tomar fotos o videos dentro del puesto durante las elecciones. <em>Solo se permite fotografiar durante el escrutinio de mesa.</em></li>
+    </ul>
+  </div>
+
+  <!-- IMPORTANTE -->
+  <div class="section" id="importante">
+    <div class="sec-title"><span class="emoji">⚠️</span><h2>Puntos Clave a Recordar</h2></div>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">🪪</div><h3>Documientos obligatorios</h3><p>Cédula + Credencial E-15. Sin ellas no puedes actuar como testigo.</p></div>
+      <div class="card"><div class="card-icon">📱</div><h3>Cédula digital</h3><p>Solo válida desde la app "Cédula Digital Colombia". NO se aceptan fotos ni PDFs.</p></div>
+      <div class="card"><div class="card-icon">📸</div><h3>Fotografías clave</h3><p>1) Página totalizada E-11 · 2) E-14 los 3 cuerpos juntos · 3) Sobre claveros sellado.</p></div>
+      <div class="card"><div class="card-icon">🖊️</div><h3>Solo 1 lapicero</h3><p>En el escrutinio, solo debe haber UN lapicero en la mesa. Quienes cuentan votos NO pueden tener lapiceros.</p></div>
+      <div class="card"><div class="card-icon">🚨</div><h3>Ante irregularidades</h3><p>Mantén la calma → Acude a la autoridad competente → Si no responden, reporta a Coordinaciones Pacto.</p></div>
+      <div class="card"><div class="card-icon">⚖️</div><h3>Reclamaciones</h3><p>Primero intenta resolver con jurados. Solo si se niegan, presenta reclamación escrita e introduce en sobre claveros.</p></div>
+      <div class="card"><div class="card-icon">👁️</div><h3>Causas de reclamación</h3><p>Más votos que sufragantes · Error aritmético en conteo · Acta sin 2 firmas de jurados · Tachaduras o borrones en actas.</p></div>
+      <div class="card"><div class="card-icon">📲</div><h3>Plataforma Pacto</h3><p>Reporta al llegar y sube todas las fotos requeridas. Mantén comunicación con coordinadores municipales y departamentales.</p></div>
+    </div>
+    <div class="alert alert-purple" style="margin-top:10px;">
+      <strong>🎯 Objetivo:</strong> Que el proceso de votación sea libre, secreto, sin presiones o interferencias de particulares o autoridades. ¡Tu presencia hace la diferencia!
+    </div>
+  </div>
+  <!-- BITACORA -->
+  <div class="section" id="bitacora">
+    <div class="sec-title"><span class="emoji">📝</span><h2>Bitácora de Apuntes</h2></div>
+    <div class="alert alert-purple">
+      <strong>💡 ¿Para qué sirve?</strong>
+      Usa esta bitácora para registrar observaciones, irregularidades, reclamaciones u horarios importantes durante tu jornada como testigo. Luego puedes guardar todo en un archivo con el botón de arriba.
+    </div>
+
+    <div class="note-form">
+      <div class="note-form-row">
+        <label>Tipo:</label>
+        <select id="noteType">
+          <option value="general">📌 General</option>
+          <option value="irregularidad">🚨 Irregularidad</option>
+          <option value="reclamacion">⚖️ Reclamación</option>
+          <option value="positivo">✅ Positivo / Resuelto</option>
+        </select>
+        <label style="margin-left:10px;">Hora:</label>
+        <input type="text" id="noteTime" placeholder="ej. 9:15 AM" style="width:110px;">
+      </div>
+      <textarea id="noteText" placeholder="Escribe tu observación o apunte aquí..."></textarea>
+
+      <div class="img-preview-row" id="imgPreviewRow"></div>
+      <input type="file" id="noteImageInput" accept="image/*" multiple capture="environment" style="display:none;" onchange="handleImageSelect(event)">
+      <input type="file" id="noteDocInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv" multiple style="display:none;" onchange="handleDocSelect(event)">
+
+      <div class="note-form-row">
+        <button type="button" class="img-attach-btn" onclick="document.getElementById('noteImageInput').click()">📷 Agregar Imagen</button>
+        <button type="button" class="img-attach-btn" onclick="document.getElementById('noteDocInput').click()">📎 Adjuntar Documento</button>
+        <button class="add-note-btn" onclick="addNote()">➕ Agregar Apunte</button>
+      </div>
+    </div>
+
+    <div class="note-toolbar">
+      <span style="font-size:0.85rem; color:#555;">Total de apuntes: <strong id="noteCount">0</strong></span>
+    </div>
+
+    <ul class="note-list" id="noteList"></ul>
+  </div>
+
+</div>
+
+<div class="img-modal" id="imgModal" onclick="closeImgModal()">
+  <button class="img-modal-close" onclick="closeImgModal()">&times;</button>
+  <img id="imgModalSrc" src="" alt="Imagen ampliada" onclick="event.stopPropagation()">
+</div>
+
+<footer>Guía preparada con base en el instructivo oficial del Movimiento Político Pacto Histórico · Jornada electoral segunda vuelta · 21 de junio</footer>
+
+<script>
+const TOTAL = 20;
+let done = JSON.parse(sessionStorage.getItem('steps') || '[]');
+
+function renderSteps() {
+  document.querySelectorAll('.step-item').forEach(el => {
+    const id = parseInt(el.dataset.id);
+    if (isNaN(id)) return;
+    const icon = el.querySelector('.check-icon');
+    if (done.includes(id)) { el.classList.add('done'); if(icon) icon.textContent='✅'; }
+    else { el.classList.remove('done'); if(icon) icon.textContent='⬜'; }
+  });
+  const pct = Math.round((done.length / TOTAL) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `Progreso: ${done.length} de ${TOTAL} pasos completados (${pct}%)`;
+}
+
+function toggleStep(el) {
+  const id = parseInt(el.dataset.id);
+  if (done.includes(id)) done = done.filter(x => x !== id);
+  else done.push(id);
+  sessionStorage.setItem('steps', JSON.stringify(done));
+  renderSteps();
+}
+
+function resetAll() {
+  if (confirm('¿Reiniciar todos los pasos?')) {
+    done = []; sessionStorage.removeItem('steps'); renderSteps();
+  }
+}
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+  document.getElementById(id).classList.add('visible');
+  document.querySelectorAll('#mainNav button').forEach((b, i) => {
+    const ids = ['checklist','horario','apertura','votacion','cierre','prohibiciones','importante','bitacora'];
+    b.classList.toggle('active', ids[i] === id);
+  });
+}
+
+/* ── IMÁGENES Y DOCUMENTOS EN BITÁCORA ── */
+let pendingImages = []; // base64 strings de imágenes de la nota actual
+let pendingDocs = [];   // {name, data} de documentos de la nota actual
+
+function handleImageSelect(event) {
+  const files = Array.from(event.target.files || []);
+  files.forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      pendingImages.push(e.target.result);
+      renderImagePreview();
+    };
+    reader.readAsDataURL(file);
+  });
+  event.target.value = '';
+}
+
+function handleDocSelect(event) {
+  const files = Array.from(event.target.files || []);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      pendingDocs.push({ name: file.name, data: e.target.result });
+      renderImagePreview();
+    };
+    reader.readAsDataURL(file);
+  });
+  event.target.value = '';
+}
+
+function renderImagePreview() {
+  const row = document.getElementById('imgPreviewRow');
+  const imgThumbs = pendingImages.map((src, i) => `
+    <div class="img-preview-thumb">
+      <img src="${src}" alt="Vista previa">
+      <button class="img-remove" onclick="removePendingImage(${i})">&times;</button>
+    </div>`).join('');
+  const docThumbs = pendingDocs.map((doc, i) => `
+    <div class="img-preview-thumb doc-thumb">
+      📄 <span>${escapeHtml(doc.name)}</span>
+      <button class="img-remove" onclick="removePendingDoc(${i})">&times;</button>
+    </div>`).join('');
+  row.innerHTML = imgThumbs + docThumbs;
+}
+
+function removePendingImage(i) {
+  pendingImages.splice(i, 1);
+  renderImagePreview();
+}
+
+function removePendingDoc(i) {
+  pendingDocs.splice(i, 1);
+  renderImagePreview();
+}
+
+function openImgModal(src) {
+  document.getElementById('imgModalSrc').src = src;
+  document.getElementById('imgModal').classList.add('visible');
+}
+
+function closeImgModal() {
+  document.getElementById('imgModal').classList.remove('visible');
+}
+
+/* ── BITÁCORA ── */
+let notes = JSON.parse(sessionStorage.getItem('notes') || '[]');
+
+const tagLabels = {
+  general: { label: '📌 General', class: 'general' },
+  irregularidad: { label: '🚨 Irregularidad', class: 'irregularidad' },
+  reclamacion: { label: '⚖️ Reclamación', class: 'reclamacion' },
+  positivo: { label: '✅ Positivo', class: 'positivo' }
+};
+
+function renderNotes() {
+  const list = document.getElementById('noteList');
+  document.getElementById('noteCount').textContent = notes.length;
+  if (notes.length === 0) {
+    list.innerHTML = '<div class="empty-notes">No hay apuntes todavía. Agrega el primero arriba 👆</div>';
+    return;
+  }
+  list.innerHTML = notes.map((n, i) => {
+    const tag = tagLabels[n.type] || tagLabels.general;
+    const imgs = (n.images && n.images.length)
+      ? `<div class="note-images">${n.images.map(src => `<img src="${src}" alt="Evidencia" onclick="openImgModal('${src}')">`).join('')}</div>`
+      : '';
+    const docs = (n.docs && n.docs.length)
+      ? `<div class="note-images">${n.docs.map(d => `<a class="doc-chip" href="${d.data}" download="${escapeHtml(d.name)}">📄 <span>${escapeHtml(d.name)}</span></a>`).join('')}</div>`
+      : '';
+    return `
+      <li class="note-card tipo-${n.type}">
+        <div class="note-meta">
+          <span class="note-tag tag-${tag.class}">${tag.label}</span>
+          <span class="note-time">${n.time ? '🕐 ' + n.time + ' · ' : ''}${n.created}</span>
+          <button class="note-del" onclick="deleteNote(${i})">🗑 Eliminar</button>
+        </div>
+        <div class="note-text">${escapeHtml(n.text)}</div>
+        ${imgs}
+        ${docs}
+      </li>`;
+  }).join('');
+}
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function addNote() {
+  const type = document.getElementById('noteType').value;
+  const time = document.getElementById('noteTime').value.trim();
+  const text = document.getElementById('noteText').value.trim();
+  if (!text) { alert('Escribe un apunte antes de guardarlo.'); return; }
+  const now = new Date();
+  const created = now.toLocaleString('es-CO', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+  notes.unshift({ type, time, text, created, images: [...pendingImages], docs: [...pendingDocs] });
+  try {
+    sessionStorage.setItem('notes', JSON.stringify(notes));
+  } catch (e) {
+    alert('No se pudo guardar: los archivos ocupan demasiado espacio. Intenta con menos o más livianos.');
+    notes.shift();
+    return;
+  }
+  document.getElementById('noteText').value = '';
+  document.getElementById('noteTime').value = '';
+  pendingImages = [];
+  pendingDocs = [];
+  renderImagePreview();
+  renderNotes();
+}
+
+function deleteNote(i) {
+  notes.splice(i, 1);
+  sessionStorage.setItem('notes', JSON.stringify(notes));
+  renderNotes();
+}
+
+/* ── CONSTRUCCIÓN DEL REPORTE (reutilizable por Guardar / PDF / Email) ── */
+function buildReportData() {
+  const checklistData = done.map(id => {
+    const el = document.querySelector(`.step-item[data-id="${id}"]`);
+    return el ? el.querySelector('strong').textContent : id;
+  });
+  const data = {
+    fecha_exportacion: new Date().toLocaleString('es-CO'),
+    checklist_completado: checklistData,
+    progreso: `${done.length} de ${TOTAL} pasos`,
+    bitacora: notes
+  };
+  return { checklistData, data };
+}
+
+function buildReportHtml(data, checklistData) {
+  let notesHtml = '';
+  if (notes.length === 0) {
+    notesHtml = '<p class="empty">(Sin apuntes registrados)</p>';
+  } else {
+    notesHtml = notes.slice().reverse().map((n, idx) => {
+      const tag = tagLabels[n.type] || tagLabels.general;
+      const imgsHtml = (n.images && n.images.length)
+        ? `<div class="imgs">${n.images.map(src => `<img src="${src}" alt="Evidencia ${idx+1}">`).join('')}</div>`
+        : '';
+      const docsHtml = (n.docs && n.docs.length)
+        ? `<div class="docs">${n.docs.map(d => `<a class="doc" href="${d.data}" download="${escapeHtml(d.name)}">📎 ${escapeHtml(d.name)}</a>`).join('')}</div>`
+        : '';
+      return `
+        <div class="nota tipo-${n.type}">
+          <div class="meta">
+            <span class="tag">${tag.label}</span>
+            <span class="time">${n.time ? '🕐 ' + n.time + ' · ' : ''}${n.created}</span>
+          </div>
+          <p class="texto">${escapeHtml(n.text).replace(/\n/g, '<br>')}</p>
+          ${imgsHtml}
+          ${docsHtml}
+        </div>`;
+    }).join('');
+  }
+
+  const checklistHtml = checklistData.length
+    ? checklistData.map(c => `<li>✓ ${escapeHtml(c)}</li>`).join('')
+    : '<li>(Ningún paso marcado como completado)</li>';
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Bitácora Testigo Electoral - ${data.fecha_exportacion}</title>
+<style>
+  body { font-family: Arial, sans-serif; background:#f4f6fa; color:#1a1a2e; margin:0; padding:0 0 40px; }
+  header { background: linear-gradient(135deg, #3b1f8c, #7b2d8b); color:white; padding:24px 32px; text-align:center; }
+  header h1 { font-size:1.5rem; margin-bottom:6px; }
+  .container { max-width:800px; margin:24px auto; padding:0 16px; }
+  h2 { color:#3b1f8c; border-bottom:3px solid #ede9f7; padding-bottom:8px; margin:24px 0 14px; }
+  .nota { background:white; border-radius:10px; padding:14px 16px; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,0.08); border-left:5px solid #7b2d8b; }
+  .nota.tipo-irregularidad { border-left-color:#e63946; }
+  .nota.tipo-reclamacion { border-left-color:#f5a623; }
+  .nota.tipo-positivo { border-left-color:#2ecc71; }
+  .meta { display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; margin-bottom:6px; font-size:0.82rem; }
+  .tag { font-weight:bold; color:#3b1f8c; }
+  .time { color:#888; }
+  .texto { font-size:0.92rem; line-height:1.5; margin:6px 0; }
+  .imgs { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+  .imgs img { width:160px; max-height:160px; object-fit:cover; border-radius:8px; border:1px solid #d0c8f0; }
+  .docs { margin-top:8px; }
+  .doc { display:inline-block; background:#ede9f7; color:#3b1f8c; padding:6px 12px; border-radius:8px; text-decoration:none; font-size:0.85rem; margin-right:6px; }
+  ul.checklist { list-style:none; padding:0; }
+  ul.checklist li { background:white; border-radius:8px; padding:10px 14px; margin-bottom:8px; font-size:0.88rem; box-shadow:0 2px 6px rgba(0,0,0,0.06); }
+  .empty { text-align:center; color:#999; padding:20px; }
+  footer { text-align:center; color:#888; font-size:0.78rem; margin-top:30px; }
+  @media print { body { background:white; } .nota, ul.checklist li { box-shadow:none; border:1px solid #ddd; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>📋 Bitácora del Testigo Electoral</h1>
+  <p>Generado: ${data.fecha_exportacion}</p>
+</header>
+<div class="container">
+  <h2>📝 Apuntes (${notes.length})</h2>
+  ${notesHtml}
+  <h2>✅ Checklist completado (${data.progreso})</h2>
+  <ul class="checklist">${checklistHtml}</ul>
+</div>
+<footer>Pacto Histórico · Jornada electoral segunda vuelta · 21 de junio</footer>
+</body>
+</html>`;
+}
+
+function downloadBlob(content, type, filename) {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ── SNAPSHOT COMPLETO DE LA APP (todas las secciones, no solo bitácora) ── */
+function buildFullSnapshotHtml() {
+  const clone = document.documentElement.cloneNode(true);
+
+  // Mostrar TODAS las secciones (checklist, horario, apertura, votación, cierre, prohibiciones, importante, bitácora)
+  clone.querySelectorAll('.section').forEach(s => s.classList.add('visible'));
+
+  // Quitar el menú de navegación (ya no aplica, todo queda visible en un solo documento)
+  const navEl = clone.querySelector('nav');
+  if (navEl) navEl.remove();
+
+  // Quitar los botones de acción (Guardar/PDF/Correo) y los inputs de archivo: no funcionan sin JS
+  const actionsDiv = clone.querySelector('header div');
+  if (actionsDiv) actionsDiv.remove();
+  clone.querySelectorAll('input[type="file"]').forEach(el => el.remove());
+  clone.querySelectorAll('.img-attach-btn, .add-note-btn, .reset-btn, .note-del').forEach(el => el.remove());
+  const imgModal = clone.querySelector('#imgModal');
+  if (imgModal) imgModal.remove();
+
+  // Quitar todo atributo onclick y los <script> (es un snapshot estático, sin interactividad)
+  clone.querySelectorAll('[onclick]').forEach(el => el.removeAttribute('onclick'));
+  clone.querySelectorAll('script').forEach(el => el.remove());
+
+  // Banner indicando fecha de exportación
+  const body = clone.querySelector('body');
+  const banner = document.createElement('div');
+  banner.setAttribute('style', 'background:#2ecc71;color:#fff;text-align:center;padding:10px;font-weight:bold;font-size:0.9rem;');
+  banner.textContent = '📄 Reporte completo exportado el ' + new Date().toLocaleString('es-CO');
+  body.insertBefore(banner, body.firstChild);
+
+  // Agregar regla CSS para que todas las secciones se vean en el snapshot, una debajo de otra
+  const styleFix = document.createElement('style');
+  styleFix.textContent = '.section{display:block !important; margin-bottom:36px; border-bottom:2px dashed #d0c8f0; padding-bottom:24px;} .img-preview-row{display:none;}';
+  clone.querySelector('head').appendChild(styleFix);
+
+  return '<!DOCTYPE html>\n' + clone.outerHTML;
+}
+
+/* ── GUARDAR TODOS LOS CAMBIOS (JSON + HTML completo) ── */
+function saveAll() {
+  const statusEl = document.getElementById('saveStatus');
+  const { checklistData, data } = buildReportData();
+
+  // 1. Descargar JSON con todos los datos
+  downloadBlob(JSON.stringify(data, null, 2), 'application/json', 'testigo_datos_' + Date.now() + '.json');
+
+  // 2. Descargar la app COMPLETA (todas las secciones) como HTML, con el estado actual ya marcado
+  const fullHtml = buildFullSnapshotHtml();
+  downloadBlob(fullHtml, 'text/html;charset=utf-8', 'guia_completa_testigo_' + Date.now() + '.html');
+
+  statusEl.textContent = '✓ Archivos descargados (' + new Date().toLocaleTimeString('es-CO') + ')';
+  setTimeout(() => { statusEl.textContent = ''; }, 5000);
+}
+
+/* ── EXPORTAR COMO PDF (usa el diálogo de impresión del navegador, funciona sin internet) ── */
+function exportPDF() {
+  const statusEl = document.getElementById('saveStatus');
+  const fullHtml = buildFullSnapshotHtml();
+
+  const printWin = window.open('', '_blank');
+  if (!printWin) {
+    alert('Tu navegador bloqueó la ventana emergente. Permite ventanas emergentes para poder exportar el PDF.');
+    return;
+  }
+  printWin.document.open();
+  printWin.document.write(fullHtml);
+  printWin.document.close();
+
+  printWin.onload = () => {
+    printWin.focus();
+    printWin.print();
+  };
+  // Respaldo en caso de que onload no se dispare en algunos navegadores
+  setTimeout(() => { try { printWin.focus(); printWin.print(); } catch(e) {} }, 600);
+
+  statusEl.textContent = '🖨️ Selecciona "Guardar como PDF" en el diálogo de impresión';
+  setTimeout(() => { statusEl.textContent = ''; }, 6000);
+}
+
+/* ── ENVIAR POR CORREO ──
+   IMPORTANTE: una página web sin servidor NO puede enviar correos de forma 100% automática
+   (los navegadores no permiten adjuntar archivos a un correo por seguridad). Esta función:
+   1) Descarga la guía COMPLETA (todas las secciones + bitácora) en HTML para que la tengas lista.
+   2) Abre tu app de correo con el destinatario, asunto y mensaje ya escritos.
+   Solo falta que adjuntes el archivo descargado y presiones enviar. */
+function sendByEmail() {
+  const statusEl = document.getElementById('saveStatus');
+  const { data } = buildReportData();
+  const fullHtml = buildFullSnapshotHtml();
+
+  downloadBlob(fullHtml, 'text/html;charset=utf-8', 'guia_completa_testigo_' + Date.now() + '.html');
+
+  const destinatario = 'plasmatuvision@gmail.com';
+  const asunto = encodeURIComponent('Guía + Bitácora Testigo Electoral - ' + data.fecha_exportacion);
+  const cuerpo = encodeURIComponent(
+    'Adjunto la guía completa del testigo electoral (checklist, horario, apertura, votación, cierre, prohibiciones, puntos clave y bitácora).\n\n' +
+    'Progreso del checklist: ' + data.progreso + '\n' +
+    'Apuntes registrados: ' + notes.length + '\n\n' +
+    '⚠️ IMPORTANTE: Tu navegador acaba de descargar el archivo "guia_completa_testigo_....html" en tu carpeta de Descargas.\n' +
+    'Por favor adjúntalo manualmente a este correo antes de enviarlo (los navegadores no permiten adjuntar archivos automáticamente por seguridad).'
+  );
+
+  setTimeout(() => {
+    window.location.href = `mailto:${destinatario}?subject=${asunto}&body=${cuerpo}`;
+  }, 400);
+
+  statusEl.textContent = '📧 Abriendo tu app de correo... adjunta el archivo descargado';
+  setTimeout(() => { statusEl.textContent = ''; }, 7000);
+}
+
+renderSteps();
+renderNotes();
+</script>
+</body>
+</html>
