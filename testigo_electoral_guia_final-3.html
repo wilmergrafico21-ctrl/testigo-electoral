@@ -237,6 +237,7 @@
   <span class="badge">¡Vamos por Más!</span>
   <div style="margin-top:14px;">
     <button id="saveAllBtn" onclick="saveAll()" class="save-all-btn">💾 Guardar todos los cambios</button>
+    <button id="sameFileBtn" onclick="saveToSameFile()" class="save-all-btn" style="background:#27ae60;">🔄 Guardar en este mismo archivo</button>
     <button id="pdfBtn" onclick="exportPDF()" class="save-all-btn" style="background:#3b1f8c;">🖨️ Guardar PDF</button>
     <button id="emailBtn" onclick="sendByEmail()" class="save-all-btn" style="background:#f5a623; color:#3b1f8c;">📧 Enviar por correo</button>
     <span id="saveStatus" class="save-status"></span>
@@ -530,11 +531,15 @@
       <textarea id="noteText" placeholder="Escribe tu observación o apunte aquí..."></textarea>
 
       <div class="img-preview-row" id="imgPreviewRow"></div>
-      <input type="file" id="noteImageInput" accept="image/*" multiple capture="environment" style="display:none;" onchange="handleImageSelect(event)">
+      <!-- Input SOLO cámara: capture sin "multiple" para que el navegador abra la cámara directamente -->
+      <input type="file" id="noteCameraInput" accept="image/*" capture="environment" style="display:none;" onchange="handleImageSelect(event)">
+      <!-- Input SOLO galería: multiple sin capture, para elegir varias fotos ya existentes -->
+      <input type="file" id="noteGalleryInput" accept="image/*" multiple style="display:none;" onchange="handleImageSelect(event)">
       <input type="file" id="noteDocInput" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.csv" multiple style="display:none;" onchange="handleDocSelect(event)">
 
       <div class="note-form-row">
-        <button type="button" class="img-attach-btn" onclick="document.getElementById('noteImageInput').click()">📷 Agregar Imagen</button>
+        <button type="button" class="img-attach-btn" onclick="document.getElementById('noteCameraInput').click()">📸 Tomar Foto</button>
+        <button type="button" class="img-attach-btn" onclick="document.getElementById('noteGalleryInput').click()">🖼️ Subir Imagen</button>
         <button type="button" class="img-attach-btn" onclick="document.getElementById('noteDocInput').click()">📎 Adjuntar Documento</button>
         <button class="add-note-btn" onclick="addNote()">➕ Agregar Apunte</button>
       </div>
@@ -890,6 +895,45 @@ function saveAll() {
 
   statusEl.textContent = '✓ Archivos descargados (' + new Date().toLocaleTimeString('es-CO') + ')';
   setTimeout(() => { statusEl.textContent = ''; }, 5000);
+}
+
+/* ── GUARDAR EN EL MISMO ARCHIVO (File System Access API) ──
+   Disponible en Chrome/Edge de escritorio y en Chrome para Android.
+   Permite elegir UN archivo .html una sola vez y luego sobrescribirlo
+   cada vez que se presiona el botón, sin generar descargas nuevas.
+   En navegadores sin soporte (Safari, Firefox) se avisa y se hace
+   automáticamente un fallback a la descarga normal. */
+let savedFileHandle = null;
+
+async function saveToSameFile() {
+  const statusEl = document.getElementById('saveStatus');
+  const fullHtml = buildFullSnapshotHtml();
+
+  if (!('showSaveFilePicker' in window)) {
+    alert('Tu navegador no soporta "guardar en el mismo archivo" (función disponible en Chrome/Edge). Se hará una descarga normal en su lugar.');
+    downloadBlob(fullHtml, 'text/html;charset=utf-8', 'guia_completa_testigo_' + Date.now() + '.html');
+    return;
+  }
+
+  try {
+    if (!savedFileHandle) {
+      savedFileHandle = await window.showSaveFilePicker({
+        suggestedName: 'guia_completa_testigo.html',
+        types: [{ description: 'Página HTML', accept: { 'text/html': ['.html'] } }]
+      });
+    }
+    const writable = await savedFileHandle.createWritable();
+    await writable.write(fullHtml);
+    await writable.close();
+
+    statusEl.textContent = '✓ Guardado en "' + savedFileHandle.name + '" (' + new Date().toLocaleTimeString('es-CO') + ')';
+    setTimeout(() => { statusEl.textContent = ''; }, 5000);
+  } catch (err) {
+    if (err.name === 'AbortError') return; // el usuario canceló el diálogo
+    console.error(err);
+    alert('No se pudo guardar en el archivo. Se hará una descarga normal en su lugar.');
+    downloadBlob(fullHtml, 'text/html;charset=utf-8', 'guia_completa_testigo_' + Date.now() + '.html');
+  }
 }
 
 /* ── EXPORTAR COMO PDF (usa el diálogo de impresión del navegador, funciona sin internet) ── */
